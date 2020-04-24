@@ -26,9 +26,8 @@ public class Simulator {
 
         while (events.peek() != null) {
             Event e = events.poll();
-            displayEvent(e, shop);
+            displayEvent(e);
             e = getNextEvent(e, shop, stats, rng);
-
             if (e != null) {
                 events.add(e);
             }
@@ -48,6 +47,7 @@ public class Simulator {
     private static Event getNextEvent(Event e, Shop shop, Stats stats, RandomGenerator rng) {
         double time = e.getTime();
         Customer c = e.getCustomer();
+        Server s = e.getServer();
         if (e.getStatus() == Event.arrives) {
             Server server = shop.chooseServer(time);
             if (server == null) {
@@ -57,47 +57,37 @@ public class Simulator {
             } else {
                 // wait or serve immediately
                 int status = server.canServe(time);
-                int serverID = server.getID();
                 if (status == 1) {
                     // serve immediately
-                    return new ServeEvent(c, time, serverID);
+                    return new ServeEvent(c, time, server);
                 } else {     
                     // wait  
-                    return new WaitEvent(c, time, serverID);
+                    return new WaitEvent(c, time, server);
                 }
             }
         } else if (e.getStatus() == Event.served) {
-            Server server = shop.getServer(e.getServerID());
-            Server newServer = server.updateServe(time + rng.genServiceTime());
-            shop.update(e.getServerID(), newServer);
-        
+            Server newServer = s.updateServe(time + rng.genServiceTime());
+            shop.update(s.getID(), newServer);
             stats.served(time - c.getArrTime());
-
-            return new DoneEvent(c, newServer.getNextAvail(), e.getServerID());
+            return new DoneEvent(c, newServer.getNextAvail(), newServer);
 
         } else if (e.getStatus() == Event.waits) {
-            Server server = shop.getServer(e.getServerID());
-            Server newServer = server.updateWait(c);
-            shop.update(e.getServerID(), newServer);
+            s.updateWait(c);
             return null;
-
         } else if (e.getStatus() == Event.done) {
-            Server server = shop.getServer(e.getServerID());
-            if (server.getRest(rng.genRandomRest())) {
-                return new ServerRest(e.getTime(), e.getServerID());
+            if (s.getRest(rng.genRandomRest())) {
+                return new ServerRest(time, s);
             } else {
-                return server.getCustomer().map(x -> new ServeEvent(x, time, e.getServerID())).orElse(null);   
+                return s.getCustomer().map(x -> new ServeEvent(x, time, s)).orElse(null);   
             }  
         } else if (e.getStatus() == Event.serverRest) {
             double newTime = time + rng.genRestPeriod();
-            Server server = shop.getServer(e.getServerID());
-            Server newServer = server.updateServe(newTime);
-            shop.update(e.getServerID(), newServer);
-            return new ServerBack(newTime, e.getServerID());
+            Server newServer = s.updateServe(newTime);
+            shop.update(s.getID(), newServer);
+            return new ServerBack(newTime, newServer);
 
         } else if (e.getStatus() == Event.serverBack) {
-            Server server = shop.getServer(e.getServerID());
-            return server.getCustomer().map(x -> new ServeEvent(x, time, e.getServerID())).orElse(null);    
+            return s.getCustomer().map(x -> new ServeEvent(x, time, s)).orElse(null);    
         } else {
             return null;
 
@@ -106,17 +96,12 @@ public class Simulator {
     }
 
     /**
-     * Simulator's job to display event details. Reduce responsibility of getNextEvent
+     * Simulator's job to display event details, reduce responsibility of getNextEvent.
      * @param e previous event
-     * @param shop contains all servers
-     * @param stats contains stats of simulator
-     * @param rng generate timings randomly
      */
-    private static void displayEvent(Event e, Shop shop) {
-        if (e.getStatus() == Event.served || e.getStatus() == Event.waits || e.getStatus() == Event.done) {
-            System.out.println(e.toString() + shop.getServer(e.getServerID()));
-        } else if (e.getStatus() == Event.arrives || e.getStatus() == Event.leaves) {
-            System.out.println(e.toString());
+    private static void displayEvent(Event e) {
+        if (e.getStatus() != Event.serverRest && e.getStatus() != Event.serverBack) {
+            System.out.println(e);
         } 
     }
 

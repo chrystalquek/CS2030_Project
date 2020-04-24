@@ -5,16 +5,9 @@ package cs2030.simulator;
  */
 
 public class ServerBack extends Event {
-    private final int serverID;
     
-    ServerBack(double time, int serverID) {
-        super(null, time, Event.serverBack);
-        this.serverID = serverID;
-    }
-
-    @Override
-    public int getServerID() {
-        return serverID;
+    ServerBack(double time, Server server) {
+        super(null, server, time, Event.serverBack);
     }
 
 }

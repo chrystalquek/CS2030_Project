@@ -5,7 +5,7 @@ package cs2030.simulator;
 public class LeaveEvent extends Event {
 
     LeaveEvent(Customer customer, double time) {
-        super(customer, time, Event.leaves);
+        super(customer, null, time, Event.leaves);
     }
 
     @Override

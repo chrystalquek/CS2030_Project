@@ -1,27 +1,17 @@
 package cs2030.simulator;
+
 /**
  * DoneEvent is a Event after Customer is served.
  */
 public class DoneEvent extends Event {
 
-    /**
-     * DoneEvent has a serverID.
-     */
-    private final int serverID;
-
-    DoneEvent(Customer customer, double time, int serverID) {
-        super(customer, time, Event.done);
-        this.serverID = serverID;
-    }
-
-    @Override
-    public int getServerID() {
-        return serverID;
+    DoneEvent(Customer customer, double time, Server server) {
+        super(customer, server, time, Event.done);
     }
 
     @Override
     public String toString() {
-        return super.toString() + " done serving by ";
+        return super.toString() + " done serving by " + super.server;
     }
 
 }

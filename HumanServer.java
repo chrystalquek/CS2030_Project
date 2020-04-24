@@ -5,7 +5,6 @@ import java.util.Optional;
  * Server's job is to serve, reject, wait, finish serving customers.
  */
 public class HumanServer extends Server {
-
     
     /**
      * Contains waiting customers.
@@ -68,10 +67,8 @@ public class HumanServer extends Server {
      * @return A new server with updated customer queue.
      */
     @Override
-    public HumanServer updateWait(Customer customer) {
-        PriorityQueue<Customer> newCustomers = new PriorityQueue<>(this.customers);
-        newCustomers.add(customer);
-        return new HumanServer(super.id, this.maxWaiting, this.probRest, super.nextAvail, newCustomers);
+    public void updateWait(Customer customer) {
+        this.customers.add(customer);
     }
 
     /**

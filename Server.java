@@ -40,10 +40,9 @@ public abstract class Server {
     public abstract Server updateServe(double time);
 
     /** 
-     * Updates server to Wait.
-     * @return A new server with same serving time but updates that it has a waiting customer.
+     * Add customer to queue.
      */
-    public abstract Server updateWait(Customer customer);
+    public abstract void updateWait(Customer customer);
 
     public abstract Optional<Customer> getCustomer();
 

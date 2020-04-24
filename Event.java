@@ -21,6 +21,11 @@ public abstract class Event {
     protected final Customer customer;
 
     /**
+     * Server is tagged to an Event.
+     */
+    protected final Server server;
+
+    /**
      * Each Event has a time.
      */
     protected final double time;
@@ -30,8 +35,9 @@ public abstract class Event {
      */
     protected final int status;
 
-    Event(Customer customer, double time, int status) {
+    Event(Customer customer, Server server, double time, int status) {
         this.customer = customer;
+        this.server = server;
         this.time = time;
         this.status = status;
     }
@@ -41,21 +47,21 @@ public abstract class Event {
         return this.customer;
     }
 
+    public Server getServer() {
+        return this.server;
+    }
+
     public double getTime() {
         return this.time;
     }
 
     public int getStatus() {
-        return status;
-    }
-
-    public int getServerID() {
-        return 0;
+        return this.status;
     }
 
     @Override
     public String toString() {
-        return String.format("%.3f", time) + " " + customer.toString();
+        return String.format("%.3f", time) + " " + customer;
     }
     
 }
