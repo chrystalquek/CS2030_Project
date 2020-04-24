@@ -15,9 +15,9 @@ public class CustomerComparator implements Comparator<Customer> {
      */
     @Override
     public int compare(Customer c, Customer d) {
-        if (c.getArrTime() > d.getArrTime()) {
+        if (c.getID() > d.getID()) {
             return 1;
-        } else if (c.getArrTime() < d.getArrTime()) {
+        } else if (c.getID() < d.getID()) {
             return -1;
         } 
     }
