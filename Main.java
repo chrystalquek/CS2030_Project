@@ -23,6 +23,10 @@ public class Main {
         // an int value representing the number of servers
         int noServers = sc.nextInt();
         // an int value for the maximum queue length, Qmax
+
+        // an int value representing the number of self-checkout counters, Nself
+        int Nself = sc.nextInt();
+
         int Qmax = sc.nextInt();
         // an int representing the number of customers (or the number of arrival events) to simulate
         int customers = sc.nextInt();
@@ -36,7 +40,7 @@ public class Main {
         // a double parameter for the probability of resting, Pr
         double probRest = sc.nextDouble();
 
-        Simulator.simulate(seed, noServers, Qmax, customers, arrivalRate, serviceRate, restingRate, probRest);
+        Simulator.simulate(seed, noServers, Nself, Qmax, customers, arrivalRate, serviceRate, restingRate, probRest);
         sc.close();
        
     }

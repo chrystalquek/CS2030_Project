@@ -64,11 +64,11 @@ public class HumanServer extends Server {
     /**
      * Updates customer queue of server.
      * @param customer Customer to add to queue.
-     * @return A new server with updated customer queue.
      */
     @Override
-    public void updateWait(Customer customer) {
+    public Server updateWait(Customer customer) {
         this.customers.add(customer);
+        return new HumanServer(super.id, this.maxWaiting, this.probRest, super.nextAvail, this.customers);
     }
 
     /**
@@ -83,6 +83,16 @@ public class HumanServer extends Server {
     @Override
     public boolean getRest(double prob) {
         return prob < this.probRest;
+    }
+
+    @Override
+    public boolean getHuman() {
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "server " + super.id;
     }
 
 

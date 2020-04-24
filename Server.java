@@ -42,7 +42,7 @@ public abstract class Server {
     /** 
      * Add customer to queue.
      */
-    public abstract void updateWait(Customer customer);
+    public abstract Server updateWait(Customer customer);
 
     public abstract Optional<Customer> getCustomer();
 
@@ -60,9 +60,6 @@ public abstract class Server {
      */
     public abstract boolean getRest(double prob);
 
-    @Override
-    public String toString() {
-        return "server " + this.id;
-    }
+    public abstract boolean getHuman();
 
 }

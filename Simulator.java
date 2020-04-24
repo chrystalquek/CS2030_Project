@@ -13,14 +13,14 @@ public class Simulator {
      * @param serverNo number of servers
      * @param events priority queue of events that the server has to manage
      */
-    public static void simulate(int seed, int noServers, int Qmax, int customers, 
+    public static void simulate(int seed, int noServers, int Nself, int Qmax, int customers, 
         double arrivalRate, double serviceRate, double restingRate, double probRest) {
 
         RandomGenerator rng = new RandomGenerator(seed, arrivalRate, serviceRate, restingRate);
 
         PriorityQueue<Event> events = generateEvents(customers, rng);
 
-        Shop shop = generateServers(noServers, Qmax, probRest);
+        Shop shop = generateServers(noServers, Nself, Qmax, probRest);
 
         Stats stats = new Stats();
 
@@ -74,11 +74,12 @@ public class Simulator {
 
         } else if (e.getStatus() == Event.waits) {
             System.out.println(e);
-            s.updateWait(c);
+            Server newServer = s.updateWait(c);
+            shop.update(s.getID(), newServer);
             return null;
         } else if (e.getStatus() == Event.done) {
             System.out.println(e);
-            if (s.getRest(rng.genRandomRest())) {
+            if (s.getHuman() && s.getRest(rng.genRandomRest())) {
                 return new ServerRest(time, s);
             } else {
                 return s.getCustomer().map(x -> new ServeEvent(x, time, s)).orElse(null);   
@@ -122,10 +123,15 @@ public class Simulator {
      * @param serverNo Number of servers.
      * @return A Shop of servers.
      */
-    private static Shop generateServers(int serverNo, int Qmax, double probRest) {
+    private static Shop generateServers(int serverNo, int Nself, int Qmax, double probRest) {
         ArrayList<Server> servers = new ArrayList<Server>();
         for (int i = 0; i < serverNo; i++) {
             servers.add(new HumanServer(i + 1, Qmax, probRest));
+        }
+        SelfCheckoutServerManager manager = new SelfCheckoutServerManager(Qmax);
+        for (int i = serverNo; i < serverNo + Nself; i++) {
+            // same ID
+            servers.add(new SelfCheckoutServer(i + 1, manager));
         }
         return new Shop(servers);
     }
