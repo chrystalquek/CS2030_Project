@@ -1,44 +1,29 @@
 package cs2030.simulator;
+import java.util.Optional;
 /**
  * Server's job is to serve, reject, wait, finish serving customers.
  */
-public class Server {
+public abstract class Server {
     /**
      * nextAvail indicates the time that the server can serve the next Customer.
      */
-    private final double nextAvail;
-    
-    /**
-     * waiting is a boolean which indicates whether there is a waiting Customer.
-     */
-    private final int waiting;
+    protected final double nextAvail;
     
     /**
      * ID indicates the serverID.
      */
-    private final int id;
-    
-    /**
-     * toServe is the time taken for the server to serve a Customer and is a constant.
-     */
-    // private static final double toServe = genServiceTime();
-    private static final double toServe = 1.00;
-    // + now?
+    protected final int id;
 
-    private int maxWaiting;
+    // private int maxWaiting;
 
-    Server(int id, int maxWaiting) {
+    Server(int id) {
         this.id = id;
         this.nextAvail = 0;
-        this.maxWaiting = maxWaiting;
-        this.waiting = 0;
     }
 
-    Server(int id, int maxWaiting, double nextAvail, int waiting) {
+    Server(int id, double nextAvail) {
         this.id = id;
-        this.maxWaiting = maxWaiting;
         this.nextAvail = nextAvail;
-        this.waiting = waiting;
     }
 
     /**
@@ -47,32 +32,22 @@ public class Server {
      * @param time Arrival time of customer.
      * @return The new status of the Event.
      */
-    public int canServe(double time) {
-        if (this.waiting == maxWaiting) {
-            return -1;
-        } else if (time < this.nextAvail) {
-            return 0;
-        } else {
-            return 1;
-        }    
-    }
+    public abstract int canServe(double time);
 
     /**
      * Updates server to Served.
      * @param time Time to update to.
      * @return A new server with updated next available time and that it accepts waiting customers.
      */
-    public Server updateServe(double time) {
-        return new Server(this.id, this.maxWaiting, time + toServe, this.waiting);
-    }
+    public abstract Server updateServe(double time);
 
     /** 
      * Updates server to Wait.
      * @return A new server with same serving time but updates that it has a waiting customer.
      */
-    public Server updateWait() {
-        return new Server(this.id, this.maxWaiting, this.nextAvail, this.waiting + 1);
-    }
+    public abstract Server updateWait(Customer customer);
+
+    public abstract Optional<Customer> getCustomer();
 
     public double getNextAvail() {
         return this.nextAvail;
@@ -80,6 +55,11 @@ public class Server {
 
     public int getID() {
         return this.id;
+    }
+
+    @Override
+    public String toString() {
+        return "server " + this.id;
     }
 
 }

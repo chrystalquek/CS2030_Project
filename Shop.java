@@ -3,16 +3,16 @@ import java.util.ArrayList;
 import java.lang.IndexOutOfBoundsException;
 
 /**
- * ServerCluster contains all the servers.
+ * Shop contains all the servers.
  */
 
-public class ServerCluster {
+public class Shop {
     /**
      * Contains all the servers.
      */
     private final ArrayList<Server> servers;
 
-    ServerCluster(ArrayList<Server> servers) {
+    Shop(ArrayList<Server> servers) {
         this.servers = servers;
     }
 
@@ -22,10 +22,10 @@ public class ServerCluster {
      * @return Server at that index.
      */
     public Server getServer(int idx) {
-        if (idx >= this.servers.size()) {
+        if (idx > this.servers.size() || idx <= 0) {
             throw new IndexOutOfBoundsException("Asked for a server that does not exist");
         } else {
-            return this.servers.get(idx);
+            return this.servers.get(idx - 1);
         }
     }
 
@@ -35,7 +35,11 @@ public class ServerCluster {
      * @param server New server to update to.
      */
     void update(int idx, Server server) {
-        this.servers.set(idx, server);
+        if (idx > this.servers.size() || idx <= 0) {
+            throw new IndexOutOfBoundsException("Asked for a server that does not exist");
+        } else {
+            this.servers.set(idx - 1, server);
+        }
     }
 
         

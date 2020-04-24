@@ -34,16 +34,10 @@ public class Stats {
 
     /**
      * Increment served by 1.
+     * Update total wait.
      */
-    void served() {
+    void served(double wait) {
         this.served++;
-    }
-
-    /**
-     * Add waiting time.
-     * @param wait Waiting time to add
-     */
-    void addWait(double wait) {
         this.totalWait += wait;
     }
 
@@ -52,7 +46,9 @@ public class Stats {
      * @return Average waiting time.
      */
     double calcWait() {
-        return totalWait / served;
+        return served == 0
+            ? 0
+            : totalWait / served;
     }
 
     @Override 

@@ -96,7 +96,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Determines whether that Customer should be served, wait or leave.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="ServerCluster.html#chooseServer(double)">chooseServer(double)</a></span> - Method in class <a href="ServerCluster.html" title="class in &lt;Unnamed&gt;">ServerCluster</a></dt>
+<dt><span class="memberNameLink"><a href="Shop.html#chooseServer(double)">chooseServer(double)</a></span> - Method in class <a href="Shop.html" title="class in &lt;Unnamed&gt;">Shop</a></dt>
 <dd>
 <div class="block">Scans through arraylist of servers and chooses one or none.</div>
 </dd>
@@ -142,27 +142,27 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="EventComparator.html#%3Cinit%3E()">EventComparator()</a></span> - Constructor for class <a href="EventComparator.html" title="class in &lt;Unnamed&gt;">EventComparator</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="ArriveEvent.html#execute(ServerCluster,Stats)">execute(ServerCluster, Stats)</a></span> - Method in class <a href="ArriveEvent.html" title="class in &lt;Unnamed&gt;">ArriveEvent</a></dt>
+<dt><span class="memberNameLink"><a href="ArriveEvent.html#execute(Shop,Stats)">execute(Shop, Stats)</a></span> - Method in class <a href="ArriveEvent.html" title="class in &lt;Unnamed&gt;">ArriveEvent</a></dt>
 <dd>
 <div class="block">Each subclass of Event has an execute method to represent an action.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="DoneEvent.html#execute(ServerCluster,Stats)">execute(ServerCluster, Stats)</a></span> - Method in class <a href="DoneEvent.html" title="class in &lt;Unnamed&gt;">DoneEvent</a></dt>
+<dt><span class="memberNameLink"><a href="DoneEvent.html#execute(Shop,Stats)">execute(Shop, Stats)</a></span> - Method in class <a href="DoneEvent.html" title="class in &lt;Unnamed&gt;">DoneEvent</a></dt>
 <dd>
 <div class="block">Each subclass of Event has an execute method to represent an action.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="Event.html#execute(ServerCluster,Stats)">execute(ServerCluster, Stats)</a></span> - Method in class <a href="Event.html" title="class in &lt;Unnamed&gt;">Event</a></dt>
+<dt><span class="memberNameLink"><a href="Event.html#execute(Shop,Stats)">execute(Shop, Stats)</a></span> - Method in class <a href="Event.html" title="class in &lt;Unnamed&gt;">Event</a></dt>
 <dd>
 <div class="block">Each subclass of Event has an execute method to represent an action.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="LeaveEvent.html#execute(ServerCluster,Stats)">execute(ServerCluster, Stats)</a></span> - Method in class <a href="LeaveEvent.html" title="class in &lt;Unnamed&gt;">LeaveEvent</a></dt>
+<dt><span class="memberNameLink"><a href="LeaveEvent.html#execute(Shop,Stats)">execute(Shop, Stats)</a></span> - Method in class <a href="LeaveEvent.html" title="class in &lt;Unnamed&gt;">LeaveEvent</a></dt>
 <dd>
 <div class="block">Each subclass of Event has an execute method to represent an action.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="ServeEvent.html#execute(ServerCluster,Stats)">execute(ServerCluster, Stats)</a></span> - Method in class <a href="ServeEvent.html" title="class in &lt;Unnamed&gt;">ServeEvent</a></dt>
+<dt><span class="memberNameLink"><a href="ServeEvent.html#execute(Shop,Stats)">execute(Shop, Stats)</a></span> - Method in class <a href="ServeEvent.html" title="class in &lt;Unnamed&gt;">ServeEvent</a></dt>
 <dd>
 <div class="block">Each subclass of Event has an execute method to represent an action.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="WaitEvent.html#execute(ServerCluster,Stats)">execute(ServerCluster, Stats)</a></span> - Method in class <a href="WaitEvent.html" title="class in &lt;Unnamed&gt;">WaitEvent</a></dt>
+<dt><span class="memberNameLink"><a href="WaitEvent.html#execute(Shop,Stats)">execute(Shop, Stats)</a></span> - Method in class <a href="WaitEvent.html" title="class in &lt;Unnamed&gt;">WaitEvent</a></dt>
 <dd>
 <div class="block">Each subclass of Event has an execute method to represent an action.</div>
 </dd>
@@ -174,7 +174,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dl>
 <dt><span class="memberNameLink"><a href="Simulator.html#generateServers(int)">generateServers(int)</a></span> - Static method in class <a href="Simulator.html" title="class in &lt;Unnamed&gt;">Simulator</a></dt>
 <dd>
-<div class="block">Creates servers within ServerCluster.</div>
+<div class="block">Creates servers within Shop.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="Event.html#getCustomer()">getCustomer()</a></span> - Method in class <a href="Event.html" title="class in &lt;Unnamed&gt;">Event</a></dt>
 <dd>&nbsp;</dd>
@@ -184,7 +184,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="Server.html#getNextAvail()">getNextAvail()</a></span> - Method in class <a href="Server.html" title="class in &lt;Unnamed&gt;">Server</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="ServerCluster.html#getServer(int)">getServer(int)</a></span> - Method in class <a href="ServerCluster.html" title="class in &lt;Unnamed&gt;">ServerCluster</a></dt>
+<dt><span class="memberNameLink"><a href="Shop.html#getServer(int)">getServer(int)</a></span> - Method in class <a href="Shop.html" title="class in &lt;Unnamed&gt;">Shop</a></dt>
 <dd>
 <div class="block">Gets a server.</div>
 </dd>
@@ -278,11 +278,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="Server.html#%3Cinit%3E(int,double,boolean)">Server(int, double, boolean)</a></span> - Constructor for class <a href="Server.html" title="class in &lt;Unnamed&gt;">Server</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="ServerCluster.html" title="class in &lt;Unnamed&gt;"><span class="typeNameLink">ServerCluster</span></a> - Class in <a href="package-summary.html">&lt;Unnamed&gt;</a></dt>
+<dt><a href="Shop.html" title="class in &lt;Unnamed&gt;"><span class="typeNameLink">Shop</span></a> - Class in <a href="package-summary.html">&lt;Unnamed&gt;</a></dt>
 <dd>
-<div class="block">ServerCluster contains all the servers.</div>
+<div class="block">Shop contains all the servers.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="ServerCluster.html#%3Cinit%3E(java.util.ArrayList)">ServerCluster(ArrayList&lt;Server&gt;)</a></span> - Constructor for class <a href="ServerCluster.html" title="class in &lt;Unnamed&gt;">ServerCluster</a></dt>
+<dt><span class="memberNameLink"><a href="Shop.html#%3Cinit%3E(java.util.ArrayList)">Shop(ArrayList&lt;Server&gt;)</a></span> - Constructor for class <a href="Shop.html" title="class in &lt;Unnamed&gt;">Shop</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="DoneEvent.html#serverID">serverID</a></span> - Variable in class <a href="DoneEvent.html" title="class in &lt;Unnamed&gt;">DoneEvent</a></dt>
 <dd>
@@ -296,7 +296,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">WaitEvent has a serverID.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="ServerCluster.html#servers">servers</a></span> - Variable in class <a href="ServerCluster.html" title="class in &lt;Unnamed&gt;">ServerCluster</a></dt>
+<dt><span class="memberNameLink"><a href="Shop.html#servers">servers</a></span> - Variable in class <a href="Shop.html" title="class in &lt;Unnamed&gt;">Shop</a></dt>
 <dd>
 <div class="block">Contains all the servers.</div>
 </dd>
@@ -377,7 +377,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </a>
 <h2 class="title">U</h2>
 <dl>
-<dt><span class="memberNameLink"><a href="ServerCluster.html#update(int,Server)">update(int, Server)</a></span> - Method in class <a href="ServerCluster.html" title="class in &lt;Unnamed&gt;">ServerCluster</a></dt>
+<dt><span class="memberNameLink"><a href="Shop.html#update(int,Server)">update(int, Server)</a></span> - Method in class <a href="Shop.html" title="class in &lt;Unnamed&gt;">Shop</a></dt>
 <dd>
 <div class="block">Updates a server in servers.</div>
 </dd>
