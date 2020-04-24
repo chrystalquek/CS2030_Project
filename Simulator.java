@@ -26,7 +26,6 @@ public class Simulator {
 
         while (events.peek() != null) {
             Event e = events.poll();
-            displayEvent(e);
             e = getNextEvent(e, shop, stats, rng);
             if (e != null) {
                 events.add(e);
@@ -49,6 +48,7 @@ public class Simulator {
         Customer c = e.getCustomer();
         Server s = e.getServer();
         if (e.getStatus() == Event.arrives) {
+            System.out.println(e);
             Server server = shop.chooseServer(time);
             if (server == null) {
                 // leave
@@ -66,15 +66,18 @@ public class Simulator {
                 }
             }
         } else if (e.getStatus() == Event.served) {
+            System.out.println(e);
             Server newServer = s.updateServe(time + rng.genServiceTime());
             shop.update(s.getID(), newServer);
             stats.served(time - c.getArrTime());
             return new DoneEvent(c, newServer.getNextAvail(), newServer);
 
         } else if (e.getStatus() == Event.waits) {
+            System.out.println(e);
             s.updateWait(c);
             return null;
         } else if (e.getStatus() == Event.done) {
+            System.out.println(e);
             if (s.getRest(rng.genRandomRest())) {
                 return new ServerRest(time, s);
             } else {
@@ -89,20 +92,11 @@ public class Simulator {
         } else if (e.getStatus() == Event.serverBack) {
             return s.getCustomer().map(x -> new ServeEvent(x, time, s)).orElse(null);    
         } else {
+            System.out.println(e);
             return null;
 
         }
 
-    }
-
-    /**
-     * Simulator's job to display event details, reduce responsibility of getNextEvent.
-     * @param e previous event
-     */
-    private static void displayEvent(Event e) {
-        if (e.getStatus() != Event.serverRest && e.getStatus() != Event.serverBack) {
-            System.out.println(e);
-        } 
     }
 
     /**
