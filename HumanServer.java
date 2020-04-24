@@ -17,17 +17,21 @@ public class HumanServer extends Server {
      * Maximum in queue allowed.
      */
     private final int maxWaiting;
+
+    private final double probRest;
     
-    HumanServer(int id, int maxWaiting) {
+    HumanServer(int id, int maxWaiting, double probRest) {
         super(id);
         this.customers = new PriorityQueue<>(new CustomerComparator());
         this.maxWaiting = maxWaiting;
+        this.probRest = probRest;
     }
 
-    HumanServer(int id, int maxWaiting, double nextAvail, PriorityQueue<Customer> customers) {
+    HumanServer(int id, int maxWaiting, double probRest, double nextAvail, PriorityQueue<Customer> customers) {
         super(id, nextAvail);
         this.customers = customers;
         this.maxWaiting = maxWaiting;
+        this.probRest = probRest;
     }
 
     /**
@@ -55,7 +59,7 @@ public class HumanServer extends Server {
      */
     @Override
     public HumanServer updateServe(double time) {
-        return new HumanServer(super.id, this.maxWaiting, time, this.customers);
+        return new HumanServer(super.id, this.maxWaiting, this.probRest, time, this.customers);
     }
 
     /**
@@ -67,15 +71,21 @@ public class HumanServer extends Server {
     public HumanServer updateWait(Customer customer) {
         PriorityQueue<Customer> newCustomers = new PriorityQueue<>(this.customers);
         newCustomers.add(customer);
-        return new HumanServer(super.id, this.maxWaiting, super.nextAvail, newCustomers);
+        return new HumanServer(super.id, this.maxWaiting, this.probRest, super.nextAvail, newCustomers);
     }
 
     /**
      * Polls out a customer from queue.
      * @return An optional that could contain the customer at the front of the customer queue.
      */
+    @Override
     public Optional<Customer> getCustomer() {
         return Optional.ofNullable(this.customers.poll());
+    }
+
+    @Override
+    public boolean getRest(double prob) {
+        return prob < this.probRest;
     }
 
 

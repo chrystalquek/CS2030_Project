@@ -5,13 +5,15 @@ package cs2030.simulator;
 public abstract class Event {
     
     /**
-     * An Event can have five possible states - ARRIVES, SERVED, WAITS, LEAVES and DONE.
+     * An Event can have five possible states - ARRIVES, SERVED, WAITS, LEAVES and DONE, SERVER_REST, SERVER_BACK
      */
     public static final int arrives = 1;
     public static final int served = 2;
     public static final int waits = 3;
     public static final int leaves = 4;
     public static final int done = 5;
+    public static final int serverRest = 6;
+    public static final int serverBack = 7;
 
     /**
      * Customer is tagged to an Event.

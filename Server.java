@@ -14,8 +14,6 @@ public abstract class Server {
      */
     protected final int id;
 
-    // private int maxWaiting;
-
     Server(int id) {
         this.id = id;
         this.nextAvail = 0;
@@ -56,6 +54,12 @@ public abstract class Server {
     public int getID() {
         return this.id;
     }
+
+    /** 
+     * Informs if wants to rest.
+     * @return boolean indicating whether it wants to rest.
+     */
+    public abstract boolean getRest(double prob);
 
     @Override
     public String toString() {

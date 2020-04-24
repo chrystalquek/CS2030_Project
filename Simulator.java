@@ -13,13 +13,14 @@ public class Simulator {
      * @param serverNo number of servers
      * @param events priority queue of events that the server has to manage
      */
-    public static void simulate(int seed, int noServers, int Qmax, int customers, double arrivalRate, double serviceRate) {
+    public static void simulate(int seed, int noServers, int Qmax, int customers, 
+        double arrivalRate, double serviceRate, double restingRate, double probRest) {
 
-        RandomGenerator rng = new RandomGenerator(seed, arrivalRate, serviceRate, 0);
+        RandomGenerator rng = new RandomGenerator(seed, arrivalRate, serviceRate, restingRate);
 
         PriorityQueue<Event> events = generateEvents(customers, rng);
 
-        Shop shop = generateServers(noServers, Qmax);
+        Shop shop = generateServers(noServers, Qmax, probRest);
 
         Stats stats = new Stats();
 
@@ -67,23 +68,36 @@ public class Simulator {
             }
         } else if (e.getStatus() == Event.served) {
             Server server = shop.getServer(e.getServerID());
-            Server newserver = server.updateServe(time + rng.genServiceTime());
-            shop.update(e.getServerID(), newserver);
+            Server newServer = server.updateServe(time + rng.genServiceTime());
+            shop.update(e.getServerID(), newServer);
         
             stats.served(time - c.getArrTime());
 
-            return new DoneEvent(c, newserver.getNextAvail(), e.getServerID());
+            return new DoneEvent(c, newServer.getNextAvail(), e.getServerID());
 
         } else if (e.getStatus() == Event.waits) {
             Server server = shop.getServer(e.getServerID());
-            Server newserver = server.updateWait(c);
-            shop.update(e.getServerID(), newserver);
+            Server newServer = server.updateWait(c);
+            shop.update(e.getServerID(), newServer);
             return null;
 
         } else if (e.getStatus() == Event.done) {
             Server server = shop.getServer(e.getServerID());
-            return server.getCustomer().map(x -> new ServeEvent(x, time, e.getServerID())).orElse(null);     
-            
+            if (server.getRest(rng.genRandomRest())) {
+                return new ServerRest(e.getTime(), e.getServerID());
+            } else {
+                return server.getCustomer().map(x -> new ServeEvent(x, time, e.getServerID())).orElse(null);   
+            }  
+        } else if (e.getStatus() == Event.serverRest) {
+            double newTime = time + rng.genRestPeriod();
+            Server server = shop.getServer(e.getServerID());
+            Server newServer = server.updateServe(newTime);
+            shop.update(e.getServerID(), newServer);
+            return new ServerBack(newTime, e.getServerID());
+
+        } else if (e.getStatus() == Event.serverBack) {
+            Server server = shop.getServer(e.getServerID());
+            return server.getCustomer().map(x -> new ServeEvent(x, time, e.getServerID())).orElse(null);    
         } else {
             return null;
 
@@ -101,9 +115,9 @@ public class Simulator {
     private static void displayEvent(Event e, Shop shop) {
         if (e.getStatus() == Event.served || e.getStatus() == Event.waits || e.getStatus() == Event.done) {
             System.out.println(e.toString() + shop.getServer(e.getServerID()));
-        } else {
+        } else if (e.getStatus() == Event.arrives || e.getStatus() == Event.leaves) {
             System.out.println(e.toString());
-        }
+        } 
     }
 
     /**
@@ -129,10 +143,10 @@ public class Simulator {
      * @param serverNo Number of servers.
      * @return A Shop of servers.
      */
-    private static Shop generateServers(int serverNo, int Qmax) {
+    private static Shop generateServers(int serverNo, int Qmax, double probRest) {
         ArrayList<Server> servers = new ArrayList<Server>();
         for (int i = 0; i < serverNo; i++) {
-            servers.add(new HumanServer(i + 1, Qmax));
+            servers.add(new HumanServer(i + 1, Qmax, probRest));
         }
         return new Shop(servers);
     }

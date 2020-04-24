@@ -31,7 +31,12 @@ public class Main {
         // a positive double parameter for the service rate, μ
         double serviceRate = sc.nextDouble();
 
-        Simulator.simulate(seed, noServers, Qmax, customers, arrivalRate, serviceRate);
+        // a positive double parameter for the resting rate, ρ
+        double restingRate = sc.nextDouble();
+        // a double parameter for the probability of resting, Pr
+        double probRest = sc.nextDouble();
+
+        Simulator.simulate(seed, noServers, Qmax, customers, arrivalRate, serviceRate, restingRate, probRest);
         sc.close();
        
     }
