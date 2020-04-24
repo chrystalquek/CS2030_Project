@@ -19,14 +19,12 @@ public class EventComparator implements Comparator<Event> {
             return 1;
         } else if (c.getTime() < d.getTime()) {
             return -1;
-        } else if (c.getCustomer() != null && d.getCustomer() != null) {
+        } else {
             if (c.getCustomer().getID() > d.getCustomer().getID()) {
                 return 1;
             } else {
                 return -1;
             }
-        } else {
-            return 0;
-        }
+        } 
     }
 }
