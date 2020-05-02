@@ -33,8 +33,8 @@ public class Stats {
     }
 
     /**
-     * Increment served by 1.
-     * Update total wait.
+     * Increment served by 1 and update total wait.
+     * @param wait To increase total wait by.
      */
     void served(double wait) {
         this.served++;

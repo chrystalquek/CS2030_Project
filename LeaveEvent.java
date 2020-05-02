@@ -1,4 +1,5 @@
 package cs2030.simulator;
+
 /**
  * LeaveEvent represents a Event with a Customer that is leaving.
  */

@@ -1,4 +1,5 @@
 package cs2030.simulator;
+
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
@@ -10,17 +11,26 @@ public class Simulator {
 
     /**
      * Sends each event in priority queue to be executed and adds new events back to queue.
-     * @param serverNo number of servers
-     * @param events priority queue of events that the server has to manage
+     * @param seed an int value representing the seed.
+     * @param noServers an int value representing the number of servers
+     * @param noSelf an int value representing the number of self-checkout counters.
+     * @param max an int value for the maximum queue length
+     * @param customers an int representing the number of customers.
+     * @param arrivalRate a positive double parameter for the arrival rate, λ.
+     * @param serviceRate a positive double parameter for the service rate, μ
+     * @param restingRate a positive double parameter for the resting rate, ρ.
+     * @param probRest a double parameter for the probability of resting, Pr.
+     * @param probGreedy a double parameter for the probability of a greedy customer occurring, Pg.
      */
-    public static void simulate(int seed, int noServers, int Nself, int Qmax, int customers, 
-        double arrivalRate, double serviceRate, double restingRate, double probRest) {
+    public static void simulate(int seed, int noServers, int noSelf, int max, int customers, 
+        double arrivalRate, double serviceRate, double restingRate, 
+            double probRest, double probGreedy) {
 
         RandomGenerator rng = new RandomGenerator(seed, arrivalRate, serviceRate, restingRate);
 
-        PriorityQueue<Event> events = generateEvents(customers, rng);
+        PriorityQueue<Event> events = generateEvents(customers, rng, probGreedy);
 
-        Shop shop = generateServers(noServers, Nself, Qmax, probRest);
+        Shop shop = generateServers(noServers, noSelf, max, probRest);
 
         Stats stats = new Stats();
 
@@ -42,6 +52,7 @@ public class Simulator {
      * @param shop contains all servers
      * @param stats contains stats of simulator
      * @param rng generate timings randomly
+     * @return next event
      */
     private static Event getNextEvent(Event e, Shop shop, Stats stats, RandomGenerator rng) {
         double time = e.getTime();
@@ -49,19 +60,20 @@ public class Simulator {
         Server s = e.getServer();
         if (e.getStatus() == Event.arrives) {
             System.out.println(e);
-            Server server = shop.chooseServer(time);
+            Server server;
+            if (!c.getGreedy()) {
+                server = shop.chooseServer(time);
+            } else {
+                server = shop.chooseServerForGreedy(time);
+            }
             if (server == null) {
-                // leave
                 stats.notserved();
                 return new LeaveEvent(c, time);
             } else {
-                // wait or serve immediately
                 int status = server.canServe(time);
                 if (status == 1) {
-                    // serve immediately
                     return new ServeEvent(c, time, server);
                 } else {     
-                    // wait  
                     return new WaitEvent(c, time, server);
                 }
             }
@@ -71,7 +83,6 @@ public class Simulator {
             shop.update(s.getID(), newServer);
             stats.served(time - c.getArrTime());
             return new DoneEvent(c, newServer.getNextAvail(), newServer);
-
         } else if (e.getStatus() == Event.waits) {
             System.out.println(e);
             Server newServer = s.updateWait(c);
@@ -95,7 +106,6 @@ public class Simulator {
         } else {
             System.out.println(e);
             return null;
-
         }
 
     }
@@ -103,16 +113,23 @@ public class Simulator {
     /**
      * Creates events containing customers.
      * @param customers Number of customers
-     * @param rng generate arrival timings randomly
+     * @param rng Generate arrival timings randomly
+     * @param probGreedy Probability that customer created is a greedy customer.
      * @return A priority queue of events
      */
-    private static PriorityQueue<Event> generateEvents(int customers, RandomGenerator rng) {
+    private static PriorityQueue<Event> generateEvents(int customers, 
+        RandomGenerator rng, double probGreedy) {
         PriorityQueue<Event> events = 
             new PriorityQueue<>(new EventComparator());
         int i = 0;
         double now = 0;
         while (i < customers) {
-            events.add(new ArriveEvent(new Customer(++i, now), now));
+            // events.add(new ArriveEvent(new Customer(++i, now), now));
+            if (rng.genCustomerType() < probGreedy) {
+                events.add(new ArriveEvent(new GreedyCustomer(++i, now), now));
+            } else {
+                events.add(new ArriveEvent(new NormalCustomer(++i, now), now));
+            }
             now += rng.genInterArrivalTime();
         }
         return events;
@@ -120,17 +137,19 @@ public class Simulator {
 
     /**
      * Creates servers within Shop.
-     * @param serverNo Number of servers.
+     * @param serverNo Number of HumanServers.
+     * @param self number of SelfCheckoutServers.
+     * @param max Maximum size of queue.
+     * @param probRest Probability of a HumanServer resting.
      * @return A Shop of servers.
      */
-    private static Shop generateServers(int serverNo, int Nself, int Qmax, double probRest) {
+    private static Shop generateServers(int serverNo, int self, int max, double probRest) {
         ArrayList<Server> servers = new ArrayList<Server>();
         for (int i = 0; i < serverNo; i++) {
-            servers.add(new HumanServer(i + 1, Qmax, probRest));
+            servers.add(new HumanServer(i + 1, max, probRest));
         }
-        SelfCheckoutServerManager manager = new SelfCheckoutServerManager(Qmax);
-        for (int i = serverNo; i < serverNo + Nself; i++) {
-            // same ID
+        SelfCheckoutServerManager manager = new SelfCheckoutServerManager(max);
+        for (int i = serverNo; i < serverNo + self; i++) {
             servers.add(new SelfCheckoutServer(i + 1, manager));
         }
         return new Shop(servers);

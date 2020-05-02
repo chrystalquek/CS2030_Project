@@ -1,18 +1,50 @@
 package cs2030.simulator;
+
 /**
- * An Event is an action that could produce a new event and change the status of servers.
+ * An Event is an action that contains information required at that point in time.
  */
 public abstract class Event {
     
     /**
-     * An Event can have five possible states - ARRIVES, SERVED, WAITS, LEAVES and DONE, SERVER_REST, SERVER_BACK
+     * An Event can have seven possible states:
+     * ARRIVES, SERVED, WAITS, LEAVES and DONE, SERVER_REST, SERVER_BACK.
      */
     public static final int arrives = 1;
+
+    /**
+     * An Event can have seven possible states:
+     * ARRIVES, SERVED, WAITS, LEAVES and DONE, SERVER_REST, SERVER_BACK.
+     */
     public static final int served = 2;
+
+    /**
+     * An Event can have seven possible states:
+     * ARRIVES, SERVED, WAITS, LEAVES and DONE, SERVER_REST, SERVER_BACK.
+     */
     public static final int waits = 3;
+
+    /**
+     * An Event can have seven possible states:
+     * ARRIVES, SERVED, WAITS, LEAVES and DONE, SERVER_REST, SERVER_BACK.
+     */
     public static final int leaves = 4;
+
+    /**
+     * An Event can have seven possible states:
+     * ARRIVES, SERVED, WAITS, LEAVES and DONE, SERVER_REST, SERVER_BACK.
+     */
     public static final int done = 5;
+
+    /**
+     * An Event can have seven possible states:
+     * ARRIVES, SERVED, WAITS, LEAVES and DONE, SERVER_REST, SERVER_BACK.
+     */
     public static final int serverRest = 6;
+
+    /**
+     * An Event can have seven possible states:
+     * ARRIVES, SERVED, WAITS, LEAVES and DONE, SERVER_REST, SERVER_BACK.
+     */
     public static final int serverBack = 7;
 
     /**
@@ -42,7 +74,6 @@ public abstract class Event {
         this.status = status;
     }
 
-    // need for comparator
     public Customer getCustomer() {
         return this.customer;
     }
@@ -61,7 +92,7 @@ public abstract class Event {
 
     @Override
     public String toString() {
-        return String.format("%.3f", time) + " " + customer;
+        return String.format("%.3f", this.time) + " " + this.customer;
     }
     
 }

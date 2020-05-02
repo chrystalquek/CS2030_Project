@@ -1,21 +1,27 @@
 package cs2030.simulator;
+
 import java.util.Comparator;
 
 /**
- * CustomerComparator sorts customers based on time then ID.
+ * EventComparator sorts based on time, type of event and customer id.
  */
 
 public class EventComparator implements Comparator<Event> {
 
+    /*
+     * Checks if event is SERVER_REST, SERVER_BACK.
+     * @param c Event.
+     * @return boolean indicating if event is SERVER_REST or SERVER_BACK.
+     */
     private boolean isServerEvent(Event c) {
         return c.getStatus() == Event.serverRest || c.getStatus() == Event.serverBack;
     }
 
     /*
      * compares two customers and returns an int based on order
-     * @param c first Event
-     * @param d second Event
-     * @return order returns either -1 or 1
+     * @param c First Event
+     * @param d Fecond Event
+     * @return integer indicating order
      */
     @Override
     public int compare(Event c, Event d) {

@@ -1,4 +1,5 @@
 package cs2030.simulator;
+
 import java.util.ArrayList;
 import java.lang.IndexOutOfBoundsException;
 
@@ -34,7 +35,7 @@ public class Shop {
      * @param idx Indicates which server to update.
      * @param server New server to update to.
      */
-    void update(int idx, Server server) {
+    public void update(int idx, Server server) {
         if (idx > this.servers.size() || idx <= 0) {
             throw new IndexOutOfBoundsException("Asked for a server that does not exist");
         } else {
@@ -63,4 +64,31 @@ public class Shop {
         
         return null;
     }
+
+    /**
+     * Same as chooseServer but caters to greedy customers.
+     * @param time Arrival time of customer.
+     * @return A server that has the shortest queue, or none if all servers all full.
+     */
+    public Server chooseServerForGreedy(double time) {
+        for (Server s: this.servers) {
+            if (s.canServe(time) == 1) {
+                return s;
+            } 
+        }
+
+        Server server = null;
+        int min = Integer.MAX_VALUE;
+
+        for (Server s: this.servers) {
+            if (s.canServe(time) == 0 && s.queueSize() < min) {
+                min = s.queueSize();
+                server = s;
+            } 
+        }
+        
+        return server;
+    }
+
+    
 }

@@ -4,43 +4,37 @@ import java.util.PriorityQueue;
 
 
 /**
- * Main is the client who provides customers.
+ * Main is the client who provides parameters of the simulation.
  */
 
 public class Main {
 
     /**
-     * Main is the client whose sole job is to accept and create a priority queue of events.
-     * After that Simulator should handle the priority queue and servers
+     * Main is the client whose sole job is to take in parameters of the simulation.
+     * After that Simulator should handle the simulation.
      * @param args command line arguments
      */
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
 
-        // an int value denoting the base seed for the RandomGenerator object;
         int seed = sc.nextInt();
-        // an int value representing the number of servers
         int noServers = sc.nextInt();
-        // an int value for the maximum queue length, Qmax
 
-        // an int value representing the number of self-checkout counters, Nself
-        int Nself = sc.nextInt();
+        int self = sc.nextInt();
 
-        int Qmax = sc.nextInt();
-        // an int representing the number of customers (or the number of arrival events) to simulate
+        int max = sc.nextInt();
         int customers = sc.nextInt();
-        // a positive double parameter for the arrival rate, λ
         double arrivalRate = sc.nextDouble();
-        // a positive double parameter for the service rate, μ
         double serviceRate = sc.nextDouble();
-
-        // a positive double parameter for the resting rate, ρ
         double restingRate = sc.nextDouble();
-        // a double parameter for the probability of resting, Pr
         double probRest = sc.nextDouble();
 
-        Simulator.simulate(seed, noServers, Nself, Qmax, customers, arrivalRate, serviceRate, restingRate, probRest);
+        double probGreedy = sc.nextDouble();
+
+        Simulator.simulate(seed, noServers, self, max, customers, 
+            arrivalRate, serviceRate, restingRate, probRest, probGreedy);
+
         sc.close();
        
     }

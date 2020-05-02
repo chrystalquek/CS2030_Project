@@ -3,17 +3,17 @@ package cs2030.simulator;
  * Customer has an id and a arrival time.
  */
 
-public class Customer {
+public abstract class Customer {
     
     /**
-     * A Customer has a Customer id that is not changed.
+     * A Customer has an id.
      */
-    private final int id;
+    protected final int id;
 
     /**
      * A Customer has an arrival time.
      */
-    private final double arrTime;
+    protected final double arrTime;
     
 
     Customer(int id, double arrTime) {
@@ -29,10 +29,11 @@ public class Customer {
         return arrTime;
     }
 
-    @Override
-    public String toString() {
-        return Integer.toString(id);
-    }
+    /**
+     * A customer can be greedy or not greedy (normal).
+     * @return Boolean indicating if customer is greedy or not greedy.
+     */
+    public abstract boolean getGreedy();
 
 }
 

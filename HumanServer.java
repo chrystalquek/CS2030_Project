@@ -1,15 +1,16 @@
 package cs2030.simulator;
+
 import java.util.PriorityQueue;
 import java.util.Optional;
+
 /**
- * Server's job is to serve, reject, wait, finish serving customers.
+ * HumanServer's job is to serve, reject, finish serving and store waiting customers.
  */
 public class HumanServer extends Server {
     
     /**
      * Contains waiting customers.
      */
-    // a self checkout dosent have its own unique queue. so its not a common trait among all servers
     private final PriorityQueue<Customer> customers;
 
     /**
@@ -17,6 +18,9 @@ public class HumanServer extends Server {
      */
     private final int maxWaiting;
 
+    /**
+     * Probability of rest.
+     */
     private final double probRest;
     
     HumanServer(int id, int maxWaiting, double probRest) {
@@ -26,7 +30,8 @@ public class HumanServer extends Server {
         this.probRest = probRest;
     }
 
-    HumanServer(int id, int maxWaiting, double probRest, double nextAvail, PriorityQueue<Customer> customers) {
+    HumanServer(int id, int maxWaiting, double probRest, double nextAvail, 
+        PriorityQueue<Customer> customers) {
         super(id, nextAvail);
         this.customers = customers;
         this.maxWaiting = maxWaiting;
@@ -37,7 +42,7 @@ public class HumanServer extends Server {
      * Determines whether that Customer should be served, wait or leave.
      * Leave returns -1, wait returns 0, serve returns 1.
      * @param time Arrival time of customer.
-     * @return The new status of the Event.
+     * @return Integer signalling availability of server.
      */
     @Override
     public int canServe(double time) {
@@ -54,7 +59,7 @@ public class HumanServer extends Server {
     /**
      * Updates next available time of server.
      * @param time Time to update to.
-     * @return A new server with updated next available time.
+     * @return A new HumanServer with updated next available time.
      */
     @Override
     public HumanServer updateServe(double time) {
@@ -64,30 +69,51 @@ public class HumanServer extends Server {
     /**
      * Updates customer queue of server.
      * @param customer Customer to add to queue.
+     * @return A new HumanServer with updated queue.
      */
     @Override
     public Server updateWait(Customer customer) {
         this.customers.add(customer);
-        return new HumanServer(super.id, this.maxWaiting, this.probRest, super.nextAvail, this.customers);
+        return new HumanServer(super.id, this.maxWaiting, this.probRest, super.nextAvail, 
+            this.customers);
     }
 
     /**
      * Polls out a customer from queue.
-     * @return An optional that could contain the customer at the front of the customer queue.
+     * @return An optional that could contain the customer that was at the front of the queue.
      */
     @Override
     public Optional<Customer> getCustomer() {
         return Optional.ofNullable(this.customers.poll());
     }
 
+    /**
+     * Compares probability and indicates whether server needs to rest.
+     * @param prob A double created from random number generator.
+     * @return A boolean indicating if server needs to rest.
+     */
     @Override
     public boolean getRest(double prob) {
         return prob < this.probRest;
     }
 
+
+    /**
+     * Indicates if server is human or self-check.
+     * @return A boolean indicating if server is human or self-check.
+     */
     @Override
     public boolean getHuman() {
         return true;
+    }
+
+    /**
+     * Number of people in customer queue.
+     * @return An integer indicating the number of customers in the waiitng queue.
+     */
+    @Override
+    public int queueSize() {
+        return this.customers.size();
     }
 
     @Override
